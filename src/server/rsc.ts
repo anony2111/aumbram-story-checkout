@@ -1,3 +1,4 @@
+import { ordersForKey } from "./checkout";
 import { getDataset } from "./dataset";
 import { getFeedPage } from "./feed";
 import { injectedLatencyMs, sleep } from "./http";
@@ -52,3 +53,44 @@ export function loadStoryBundle(storyId: string) {
 
   return { story, creator, products, creatorFeedOrder: [...dataset.creatorFeedOrder] };
 }
+
+/**
+ * Everything the confirmation page renders, resolved server-side.
+ *
+ * Orders store ids, not names — so a client that only had the order would need a
+ * request per vendor, per creator and per variant to render one screen. Reading
+ * the key here means a refresh paints from HTML.
+ */
+export function loadOrdersForKey(idempotencyKey: string) {
+  const dataset = getDataset();
+  const orders = ordersForKey(idempotencyKey);
+
+  const vendorNames: Record<string, string> = {};
+  const creatorHandles: Record<string, string> = {};
+  const lineTitles: Record<string, string> = {};
+
+  for (const order of orders) {
+    const vendor = dataset.vendors.get(order.vendorId);
+    if (vendor) vendorNames[order.vendorId] = vendor.name;
+
+    const creatorId = order.attribution.creatorId;
+    if (creatorId) {
+      const creator = dataset.creators.get(creatorId);
+      if (creator) creatorHandles[creatorId] = creator.handle;
+    }
+
+    for (const line of order.lines) {
+      const ref = dataset.variants.get(line.variantId);
+      if (ref) {
+        const options = Object.values(ref.variant.options).join(" · ");
+        lineTitles[line.variantId] = options
+          ? `${ref.product.title} · ${options}`
+          : ref.product.title;
+      }
+    }
+  }
+
+  return { orders, vendorNames, creatorHandles, lineTitles };
+}
+
+export type ConfirmationBundle = ReturnType<typeof loadOrdersForKey>;

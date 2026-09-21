@@ -1,0 +1,323 @@
+.page {
+  padding: var(--space-3) var(--space-3) var(--space-6);
+  background: var(--bg-inset);
+  min-height: calc(100dvh - var(--header-height));
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  padding: var(--space-2) var(--space-1) var(--space-3);
+}
+
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  margin-bottom: var(--space-3);
+}
+
+.sectionIndex {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bg-inset);
+  color: var(--fg-muted);
+  font-size: 11px;
+}
+
+/* --------------------------------------------------------------- form */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: var(--space-3);
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-muted);
+}
+
+.input {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 0 var(--space-3);
+  /* 48px keeps the tap target comfortable and stops iOS zooming on focus. */
+  min-height: 48px;
+  font-size: 16px;
+  background: var(--bg);
+}
+
+.inputInvalid {
+  composes: input;
+  border-color: var(--danger);
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--fg-subtle);
+}
+
+.error {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--danger);
+}
+
+/* ------------------------------------------------------------ delivery */
+
+.orderBlock {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.orderBlockUnserviceable {
+  composes: orderBlock;
+  border-color: var(--danger);
+  background: var(--danger-subtle);
+}
+
+.orderHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+}
+
+.orderLine {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: 13px;
+  color: var(--fg-muted);
+  padding: 2px 0;
+}
+
+.orderTotals {
+  border-top: 1px dashed var(--border);
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+}
+
+.totalsRow {
+  display: flex;
+  justify-content: space-between;
+  font-variant-numeric: tabular-nums;
+}
+
+.totalsRowStrong {
+  composes: totalsRow;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.freeDelivery {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.warning {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: 13px;
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.linkButton {
+  align-self: flex-start;
+  border: 1px solid currentColor;
+  background: transparent;
+  border-radius: var(--radius);
+  color: inherit;
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.splitNotice {
+  font-size: 13px;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-3);
+}
+
+.loading {
+  font-size: 13px;
+  color: var(--fg-subtle);
+}
+
+/* ------------------------------------------------------------- payment */
+
+.paymentOption {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  margin-bottom: var(--space-2);
+  min-height: 56px;
+}
+
+.paymentOptionSelected {
+  composes: paymentOption;
+  border-color: var(--fg);
+}
+
+.paymentOptionDisabled {
+  composes: paymentOption;
+  background: var(--bg-subtle);
+  color: var(--fg-subtle);
+}
+
+.paymentLabel {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.paymentReason {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--danger);
+  margin-top: 2px;
+}
+
+/* ---------------------------------------------------------- place order */
+
+/*
+ * Deliberately in flow rather than pinned to the bottom of the viewport.
+ *
+ * A sticky call-to-action floats over the form while the shopper is still in it,
+ * which on a small screen means it covers the field under the thumb. Here the
+ * button sits directly beneath the payment choice it depends on, which is where
+ * someone looks for it anyway, and nothing overlaps an input.
+ */
+.footer {
+  padding: var(--space-2) 0 var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.placeButton {
+  width: 100%;
+  border: 1px solid var(--fg);
+  background: var(--fg);
+  color: var(--bg);
+  border-radius: var(--radius);
+  min-height: 52px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.placeButton:disabled {
+  border-color: var(--border-strong);
+  background: var(--bg-inset);
+  color: var(--fg-subtle);
+}
+
+.statusMessage {
+  font-size: 13px;
+  text-align: center;
+  color: var(--fg-muted);
+  min-height: 18px;
+}
+
+.problemBox {
+  border: 1px solid var(--danger);
+  background: var(--danger-subtle);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: 13px;
+  color: var(--danger);
+  margin-bottom: var(--space-3);
+}
+
+.problemTitle {
+  font-weight: 700;
+}
+
+.problemAction {
+  align-self: flex-start;
+  border: 1px solid var(--danger);
+  background: var(--danger);
+  color: #fff;
+  border-radius: var(--radius);
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.unknownBox {
+  composes: problemBox;
+  border-color: var(--warning);
+  background: var(--warning-subtle);
+  color: var(--warning);
+}
+
+.unknownAction {
+  composes: problemAction;
+  border-color: var(--warning);
+  background: var(--warning);
+}
+
+.empty {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+}
+
+.sheetList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sheetLine {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: 14px;
+}

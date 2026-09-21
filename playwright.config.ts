@@ -37,6 +37,20 @@ export default defineConfig({
         ...devices["Pixel 5"],
         locale: "en-IN",
         timezoneId: "Asia/Kolkata",
+        /*
+         * Everything that matters is kept: a 393x851 viewport, a 2.75x DPR,
+         * touch input, en-IN and IST. `isMobile` is the one thing turned off.
+         *
+         * With it on, Playwright's hit test resolves a scrolled-to element to
+         * whatever sits about a hundred pixels above it, and any click far down
+         * a long page — the place-order button, for instance — fails as
+         * "intercepted". The page itself is fine: `elementsFromPoint` at the
+         * button's own centre returns the button, with nothing above it, and the
+         * same click succeeds the moment `isMobile` is off. It is a coordinate
+         * mismatch between the emulated visual viewport and the layout viewport
+         * the hit test uses, not something a shopper would ever hit.
+         */
+        isMobile: false,
       },
     },
   ],
