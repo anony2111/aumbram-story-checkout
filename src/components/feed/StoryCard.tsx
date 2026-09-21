@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 import styles from "./feed.module.css";
+import { StoryCardLink } from "./StoryCardLink";
 import { formatINR } from "@/domain/money";
 import type { Creator } from "@/domain/types";
 import type { ProductCardView, StoryCardView } from "@/domain/api";
@@ -22,23 +22,29 @@ export interface StoryCardProps {
   priority?: boolean;
 }
 
-const STORY_IMAGE_SIZES = "(max-width: 448px) 100vw, 448px";
-
 export function StoryCard({ story, creator, products, t, priority = false }: StoryCardProps) {
   return (
     <article className={styles.card} data-testid="story-card" data-story-id={story.id}>
-      <Link className={styles.storyLink} href={`/stories/${story.id}`} prefetch={false}>
+      <StoryCardLink story={story}>
         <div className={styles.storyMedia}>
-          <Image
+          {/*
+            * A plain <img> rather than next/image, and the only one in the feed.
+            * The full-screen viewer paints this same URL, and the two have to
+            * match exactly for the browser cache to make that transition
+            * instant. An optimiser choosing a different width for a card than
+            * for a full-screen frame would guarantee a miss on the one paint
+            * that has to be immediate.
+            */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             className={styles.storyImage}
             src={story.coverUrl}
             alt={story.caption}
             width={720}
             height={900}
-            sizes={STORY_IMAGE_SIZES}
-            priority={priority}
             loading={priority ? "eager" : "lazy"}
             fetchPriority={priority ? "high" : "auto"}
+            decoding="async"
           />
           {story.taggedProductCount > 0 ? (
             <span className={styles.storyTag}>
@@ -60,7 +66,7 @@ export function StoryCard({ story, creator, products, t, priority = false }: Sto
             </p>
           </div>
         </div>
-      </Link>
+      </StoryCardLink>
 
       {products.length > 0 ? (
         <ul className={styles.storyProducts}>

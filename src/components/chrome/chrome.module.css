@@ -47,6 +47,16 @@
   background: var(--bg-subtle);
 }
 
+/* Same target and badge, drawn in white over a photograph. */
+.iconButtonOverlay {
+  composes: iconButton;
+  color: #fff;
+}
+
+.iconButtonOverlay:hover {
+  background: rgb(255 255 255 / 12%);
+}
+
 .badge {
   position: absolute;
   top: 4px;

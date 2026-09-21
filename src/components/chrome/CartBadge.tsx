@@ -6,19 +6,23 @@ import { useCart } from "@/features/cart/cart-queries";
 import { useTranslator } from "@/i18n/client";
 
 /**
- * Cart link and item count, present on every page.
+ * Cart link and item count, present on every surface.
  *
  * The count comes from the cart query, so it reflects optimistic changes the
  * moment they are applied rather than after a round trip.
+ *
+ * The story viewer has no app bar — it is deliberately immersive — so it renders
+ * this in its own header with the `overlay` tone, which draws in white over the
+ * photograph instead of on the light chrome.
  */
-export function CartBadge() {
+export function CartBadge({ tone = "bar" }: { tone?: "bar" | "overlay" }) {
   const t = useTranslator();
   const { data } = useCart();
   const count = data?.itemCount ?? 0;
 
   return (
     <Link
-      className={styles.iconButton}
+      className={tone === "overlay" ? styles.iconButtonOverlay : styles.iconButton}
       href="/cart"
       aria-label={count > 0 ? t("app.cartWithCount", { count }) : t("app.cart")}
     >

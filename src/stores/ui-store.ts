@@ -20,16 +20,35 @@ export interface ProductSheetRequest {
   variantId?: string;
 }
 
+/**
+ * The cover a story card was showing when it was tapped.
+ *
+ * The viewer route is server-rendered, so on a slow connection there is a gap
+ * between the tap and the first byte. Handing the cover across lets the loading
+ * state paint the exact frame the reader just tapped, from their own cache,
+ * instead of a black screen.
+ */
+export interface PendingStory {
+  storyId: string;
+  coverUrl: string;
+  caption: string;
+  segmentCount: number;
+}
+
 interface UiState {
   productSheet: ProductSheetRequest | null;
   openProductSheet: (request: ProductSheetRequest) => void;
   closeProductSheet: () => void;
+  pendingStory: PendingStory | null;
+  setPendingStory: (story: PendingStory | null) => void;
 }
 
 export const useUiStore = create<UiState>()((set) => ({
   productSheet: null,
   openProductSheet: (request) => set({ productSheet: request }),
   closeProductSheet: () => set({ productSheet: null }),
+  pendingStory: null,
+  setPendingStory: (story) => set({ pendingStory: story }),
 }));
 
 /** True when any sheet is open — the story timer subscribes to this. */
