@@ -34,6 +34,7 @@ function livePriceRange(product: Product): { min: Money; max: Money } {
 
 export function productCard(product: Product): ProductCardView {
   const image = product.images[0];
+  const inStock = product.variants.filter((variant) => currentStock(variant.id) > 0);
   return {
     id: product.id,
     vendorId: product.vendorId,
@@ -42,6 +43,8 @@ export function productCard(product: Product): ProductCardView {
     priceRange: livePriceRange(product),
     mrp: product.mrp ?? null,
     totalStock: totalStockForProduct(product.id),
+    variantCount: product.variants.length,
+    quickAddVariantId: inStock.length === 1 ? (inStock[0]?.id ?? null) : null,
   };
 }
 

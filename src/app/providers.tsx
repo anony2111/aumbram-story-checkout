@@ -3,7 +3,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import type { ReactNode } from "react";
+import { I18nProvider } from "@/i18n/client";
 import { ApiRequestError } from "@/lib/api-client";
+import type { Dictionary } from "@/i18n/messages/en";
+import type { Locale } from "@/i18n/config";
 
 /**
  * Client providers.
@@ -19,7 +22,15 @@ import { ApiRequestError } from "@/lib/api-client";
  * - no refetch on window focus — on a phone, focus changes constantly and every
  *   refetch costs someone's data.
  */
-export function Providers({ children }: { children: ReactNode }) {
+export function Providers({
+  children,
+  locale,
+  dictionary,
+}: {
+  children: ReactNode;
+  locale: Locale;
+  dictionary: Dictionary;
+}) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -40,5 +51,11 @@ export function Providers({ children }: { children: ReactNode }) {
       })
   );
 
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <I18nProvider locale={locale} dictionary={dictionary}>
+        {children}
+      </I18nProvider>
+    </QueryClientProvider>
+  );
 }

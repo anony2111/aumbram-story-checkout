@@ -10,7 +10,8 @@ import type { FeedCard, FeedPage, ProductCardView } from "@/domain/api";
  * inserts cannot shift a page under the reader, and that is called out in the ADR.
  */
 
-export const DEFAULT_FEED_LIMIT = 20;
+export { DEFAULT_FEED_LIMIT } from "@/lib/feed-constants";
+
 const MAX_FEED_LIMIT = 50;
 
 export function encodeCursor(offset: number): string {

@@ -75,6 +75,12 @@ export interface ProductCardView {
   mrp: Money | null;
   /** Summed across variants; drives "Sold out" and "Only N left". */
   totalStock: number;
+  variantCount: number;
+  /**
+   * Set only when exactly one variant is purchasable, which makes quick-add a
+   * single tap. Anything else has to go through the picker in the sheet.
+   */
+  quickAddVariantId: string | null;
 }
 
 export interface StoryCardView {

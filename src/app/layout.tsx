@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Providers } from "./providers";
+import { getLocale } from "@/i18n/server";
+import { getDictionary } from "@/i18n/translate";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,11 +17,19 @@ export const viewport: Viewport = {
   themeColor: "#ffffff",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+/**
+ * The locale is resolved on the server from a cookie, so `<html lang>` and every
+ * string are already correct in the first byte of HTML.
+ */
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const locale = await getLocale();
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body>
-        <Providers>{children}</Providers>
+        <Providers locale={locale} dictionary={getDictionary(locale)}>
+          {children}
+        </Providers>
       </body>
     </html>
   );

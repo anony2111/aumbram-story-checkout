@@ -1,0 +1,33 @@
+.button,
+.inlineButton {
+  border: 1px solid var(--fg);
+  background: var(--fg);
+  color: var(--bg);
+  border-radius: var(--radius);
+  padding: 0 var(--space-4);
+  min-height: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.inlineButton {
+  width: 100%;
+  min-height: 48px;
+  font-size: 15px;
+}
+
+.button:disabled,
+.inlineButton:disabled {
+  background: var(--bg-inset);
+  border-color: var(--border-strong);
+  color: var(--fg-subtle);
+  cursor: not-allowed;
+}
+
+.button[data-state="added"],
+.inlineButton[data-state="added"] {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+}
