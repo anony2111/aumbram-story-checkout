@@ -80,6 +80,8 @@ export interface ProductCardView {
   /** Summed across variants; drives "Sold out" and "Only N left". */
   totalStock: number;
   variantCount: number;
+  /** Needed to sum live stock updates, which arrive per variant. */
+  variantIds: string[];
   /**
    * Set only when exactly one variant is purchasable, which makes quick-add a
    * single tap. Anything else has to go through the picker in the sheet.

@@ -14,6 +14,7 @@ import {
   variantOptionGroups,
 } from "@/domain/variants";
 import { useCartStore } from "@/features/cart/cart-store";
+import { useLiveStore } from "@/features/live/live-store";
 import { useTranslator } from "@/i18n/client";
 import { apiGet } from "@/lib/api-client";
 import { useUiStore } from "@/stores/ui-store";
@@ -119,15 +120,26 @@ function ProductSheetBody({
   const add = useCartStore((state) => state.add);
   const [added, setAdded] = useState(false);
 
-  const groups = useMemo(() => variantOptionGroups(product.variants), [product.variants]);
+  // A stock update can sell out the chosen variant while the sheet is open, so
+  // the picker is derived from live stock rather than from the server render.
+  const liveStock = useLiveStore((state) => state.stock);
+  const variants = useMemo(
+    () =>
+      product.variants.map((variant) => ({
+        ...variant,
+        stock: liveStock[variant.id] ?? variant.stock,
+      })),
+    [product.variants, liveStock]
+  );
+
+  const groups = useMemo(() => variantOptionGroups(variants), [variants]);
 
   const [selection, setSelection] = useState<VariantSelection>(() => {
     const preselected = product.variants.find((variant) => variant.id === preselectedVariantId);
     return preselected ? { ...preselected.options } : defaultSelection(product.variants);
   });
 
-  // A live stock update can sell out the chosen variant underneath the shopper.
-  const selected = findVariantForSelection(product.variants, selection);
+  const selected = findVariantForSelection(variants, selection);
   const stock = stockState(selected?.stock ?? 0);
   const soldOut = stock.kind === "sold_out";
 

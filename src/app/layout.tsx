@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Providers } from "./providers";
 import { CartSync } from "@/features/cart/CartSync";
+import { DeferredClients } from "@/features/telemetry/DeferredClients";
 import { ProductSheetHost } from "@/features/product/ProductSheet";
 import { getLocale } from "@/i18n/server";
 import { getDictionary } from "@/i18n/translate";
@@ -40,6 +41,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <ProductSheetHost />
           {/* Drains the offline mutation queue on load and on reconnect. */}
           <CartSync />
+          {/* RUM and the live stream, code-split and mounted once idle. */}
+          <DeferredClients />
         </Providers>
       </body>
     </html>

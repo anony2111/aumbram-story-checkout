@@ -46,6 +46,7 @@ export function productCard(product: Product): ProductCardView {
     mrp: product.mrp ?? null,
     totalStock: totalStockForProduct(product.id),
     variantCount: product.variants.length,
+    variantIds: product.variants.map((variant) => variant.id),
     quickAddVariantId: inStock.length === 1 ? (inStock[0]?.id ?? null) : null,
   };
 }

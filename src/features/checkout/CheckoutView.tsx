@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./checkout.module.css";
 import { AddressForm } from "./AddressForm";
 import { buildOrderPayload, EMPTY_ADDRESS, firstInvalidField, validateAddress } from "./payload";
@@ -12,6 +12,7 @@ import { formatINR } from "@/domain/money";
 import { orderCount, unserviceableGroups } from "@/domain/quote";
 import { useCartStore } from "@/features/cart/cart-store";
 import { useCartView } from "@/features/cart/use-cart-view";
+import { track } from "@/features/telemetry/analytics";
 import { useTranslator } from "@/i18n/client";
 import { useOnlineStatus } from "@/lib/use-online-status";
 import type { Quote, QuoteGroup } from "@/domain/quote";
@@ -33,6 +34,15 @@ export function CheckoutView() {
   const cart = useCartView();
   const removeFromCart = useCartStore((store) => store.remove);
   const hydrated = useCartStore((store) => store.hydrated);
+
+  // Once per visit. The attribution rule elsewhere in the system measures 72
+  // hours back from this event, so it has to fire exactly once.
+  const startReported = useRef(false);
+  useEffect(() => {
+    if (startReported.current) return;
+    startReported.current = true;
+    track("checkout_start");
+  }, []);
 
   const [values, setValues] = useState<AddressFormValues>(EMPTY_ADDRESS);
   const [touched, setTouched] = useState<Partial<Record<AddressField, boolean>>>({});

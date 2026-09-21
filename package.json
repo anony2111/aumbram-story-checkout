@@ -20,7 +20,10 @@
     "test:watch": "vitest",
     "pretest:e2e": "npm run seed",
     "test:e2e": "playwright test",
-    "e2e:install": "playwright install --with-deps chromium"
+    "e2e:install": "playwright install --with-deps chromium",
+    "check:bundle": "node scripts/check-bundle.mjs",
+    "perf:lighthouse": "node scripts/lighthouse.mjs",
+    "perf:inp": "node scripts/measure-inp.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.103.2",
@@ -49,6 +52,7 @@
     "eslint-config-next": "^15.5.25",
     "jest-axe": "^11.0.0",
     "jsdom": "^29.1.1",
+    "lighthouse": "^13.5.0",
     "typescript": "^5",
     "vitest": "^5.0.1"
   }

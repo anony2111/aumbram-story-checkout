@@ -43,7 +43,7 @@ export function StoryCard({ story, creator, products, t, priority = false }: Sto
             width={720}
             height={900}
             loading={priority ? "eager" : "lazy"}
-            fetchPriority={priority ? "high" : "auto"}
+            fetchPriority={priority ? "high" : "low"}
             decoding="async"
           />
           {story.taggedProductCount > 0 ? (

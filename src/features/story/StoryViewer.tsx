@@ -9,6 +9,8 @@ import { StoryProgress } from "./StoryProgress";
 import { useStoryNavigation } from "./useStoryNavigation";
 import { useStoryPlayer } from "./useStoryPlayer";
 import { CartBadge } from "@/components/chrome/CartBadge";
+import { useLiveViewers } from "@/features/live/live-store";
+import { track } from "@/features/telemetry/analytics";
 import { useTranslator } from "@/i18n/client";
 import { apiGet } from "@/lib/api-client";
 import { useUiStore } from "@/stores/ui-store";
@@ -62,6 +64,9 @@ export function StoryViewer({ story, creator, products, creatorFeedOrder }: Stor
     creatorFeedOrder,
   });
 
+  // Only this story's count; another story's update re-renders nothing here.
+  const viewers = useLiveViewers(story.id);
+
   const segment = story.segments[state.segmentIndex];
   const nextSegment = story.segments[state.segmentIndex + 1];
 
@@ -93,6 +98,22 @@ export function StoryViewer({ story, creator, products, creatorFeedOrder }: Stor
     const firstSegment = upcoming?.segments[0];
     if (firstSegment) preload(frameUrl(firstSegment), { as: "image", fetchPriority: "low" });
   }
+
+  // ------------------------------------------------------------ analytics
+  //
+  // A story counts as viewed after three seconds of actual playback — paused
+  // time is not watched time, and the timer already excludes it. Reported once
+  // per story, because this event is what a creator's commission is traced
+  // back through.
+  const viewReported = useRef(false);
+  const watchedMs =
+    durations.slice(0, state.segmentIndex).reduce((sum, duration) => sum + duration, 0) +
+    state.elapsedMs;
+  useEffect(() => {
+    if (viewReported.current || watchedMs < 3000) return;
+    viewReported.current = true;
+    track("story_view", { storyId: story.id, creatorId: creator.id, watchMs: Math.round(watchedMs) });
+  }, [watchedMs, story.id, creator.id]);
 
   // ------------------------------------------------------------- overflow
   const { goToAdjacentStory } = navigation;
@@ -304,6 +325,11 @@ export function StoryViewer({ story, creator, products, creatorFeedOrder }: Stor
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className={styles.avatar} src={creator.avatarUrl} alt="" width={26} height={26} />
           <span>{creator.handle}</span>
+          {viewers === undefined ? null : (
+            <span className={styles.viewers} data-testid="live-viewers">
+              {t("story.viewers", { count: viewers })}
+            </span>
+          )}
         </p>
         <span className={styles.spacer} />
         {/* The brief wants the cart count on every surface; the viewer has no app bar. */}
@@ -336,6 +362,12 @@ export function StoryViewer({ story, creator, products, creatorFeedOrder }: Stor
         t={t}
         onOpen={(productId) => {
           const product = products.find((candidate) => candidate.id === productId);
+          track("story_product_tap", {
+            storyId: story.id,
+            creatorId: creator.id,
+            productId,
+            segmentIndex: state.segmentIndex,
+          });
           openProductSheet({
             productId,
             // The whole point of the viewer: this is what a creator gets paid on.

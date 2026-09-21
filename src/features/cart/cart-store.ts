@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { enqueue, EMPTY_CART, projectCart } from "./cart-projection";
 import type { CartLinePreview, PendingMutation, ProjectedCart } from "./cart-projection";
+import { track } from "@/features/telemetry/analytics";
 import { apiGet, apiRequest, ApiRequestError } from "@/lib/api-client";
 import type { CartResponse } from "@/domain/api";
 import type { Attribution } from "@/domain/types";
@@ -155,6 +156,16 @@ export const useCartStore = create<CartState>()(
           // A fresh add is the shopper's answer to whatever was wrong before.
           problems: withoutKey(state.problems, input.variantId),
         }));
+        // Reported from here rather than from each button, so an add can never
+        // happen without being counted.
+        track("add_to_cart", {
+          variantId: input.variantId,
+          productId: input.preview.productId,
+          vendorId: input.preview.vendor.id,
+          value: input.preview.unitPrice.amount,
+          ...(input.attribution?.storyId ? { storyId: input.attribution.storyId } : {}),
+          ...(input.attribution?.creatorId ? { creatorId: input.attribution.creatorId } : {}),
+        });
         void get().sync();
       },
 
