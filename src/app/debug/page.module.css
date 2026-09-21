@@ -1,0 +1,134 @@
+.page {
+  max-width: var(--app-width);
+  margin: 0 auto;
+  padding: var(--space-4);
+  background: var(--bg);
+  min-height: 100dvh;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.lede {
+  color: var(--fg-muted);
+  font-size: 13px;
+  margin-top: var(--space-1);
+}
+
+.section {
+  margin-top: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  background: var(--surface);
+}
+
+.sectionTitle {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  margin-bottom: var(--space-3);
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+}
+
+.field + .field {
+  border-top: 1px dashed var(--border);
+}
+
+.label {
+  font-size: 14px;
+}
+
+.hint {
+  display: block;
+  font-size: 12px;
+  color: var(--fg-subtle);
+  margin-top: 2px;
+}
+
+.control {
+  flex: 0 0 auto;
+}
+
+.select,
+.number {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+  background: var(--bg);
+}
+
+.number {
+  width: 92px;
+  text-align: right;
+}
+
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.button {
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.button:hover {
+  background: var(--bg-subtle);
+}
+
+.danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.status {
+  margin-top: var(--space-3);
+  font-size: 13px;
+  color: var(--success);
+  min-height: 18px;
+}
+
+.error {
+  color: var(--danger);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px var(--space-3);
+  font-size: 13px;
+}
+
+.grid dt {
+  color: var(--fg-subtle);
+}
+
+.grid dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.back {
+  display: inline-block;
+  margin-top: var(--space-5);
+  font-size: 14px;
+  color: var(--accent);
+  text-decoration: underline;
+}
