@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import type { ProductDetail } from "@/domain/api";
 import type { Attribution } from "@/domain/types";
 
 /**
@@ -18,6 +19,13 @@ export interface ProductSheetRequest {
   attribution: Attribution;
   /** Pre-selected variant, e.g. when reopening from a cart line. */
   variantId?: string;
+  /**
+   * The product, when the opener already has it — the story viewer is handed
+   * every tagged product by the server render. Passing it means the sheet opens
+   * with no request at all, which is the difference between working and not
+   * working in a tunnel, and one less round trip everywhere else.
+   */
+  product?: ProductDetail;
 }
 
 /**

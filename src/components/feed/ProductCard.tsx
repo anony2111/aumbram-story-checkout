@@ -81,12 +81,7 @@ export function ProductCard({ card, t, priority = false, reason }: ProductCardPr
           ) : (
             <span />
           )}
-          <QuickAddButton
-            productId={card.id}
-            quickAddVariantId={card.quickAddVariantId}
-            soldOut={soldOut}
-            title={card.title}
-          />
+          <QuickAddButton card={card} />
         </div>
       </div>
     </article>

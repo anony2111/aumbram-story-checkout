@@ -90,6 +90,9 @@ export const hi: Dictionary = {
   "cart.subtotal": "उप-योग",
   "cart.checkout": "चेकआउट",
   "cart.discoveredVia": "{creatorHandle} के ज़रिए मिला",
+  "cart.fromStory": "एक स्टोरी से जो आपने देखी",
+  "cart.problemsTitle": "आपके ध्यान की ज़रूरत है",
+  "cart.lineCount": { one: "{count} चीज़", other: "{count} चीज़ें" },
 
   // ----------------------------------------------------------- checkout
   "checkout.title": "चेकआउट",

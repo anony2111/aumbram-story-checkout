@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./product-sheet.module.css";
 import quickAddStyles from "@/components/feed/quick-add.module.css";
 import { BottomSheet } from "@/components/ui/BottomSheet";
@@ -13,7 +13,7 @@ import {
   findVariantForSelection,
   variantOptionGroups,
 } from "@/domain/variants";
-import { useAddToCart } from "@/features/cart/cart-queries";
+import { useCartStore } from "@/features/cart/cart-store";
 import { useTranslator } from "@/i18n/client";
 import { apiGet } from "@/lib/api-client";
 import { useUiStore } from "@/stores/ui-store";
@@ -41,17 +41,22 @@ export function ProductSheetHost() {
     if (request) setLastRequest(request);
   }, [request]);
 
-  const productId = (request ?? lastRequest)?.productId;
-  const attribution = (request ?? lastRequest)?.attribution ?? {};
+  const active = request ?? lastRequest;
+  const productId = active?.productId;
+  const attribution = active?.attribution ?? {};
+  const handedOver = active?.product;
 
+  // Only asked for when nobody handed it over. A sheet opened from a story frame
+  // needs no network; one opened from a feed card does, because a card carries
+  // no variants.
   const productQuery = useQuery({
     queryKey: ["product", productId],
     queryFn: ({ signal }) => apiGet<ProductDetail>(`/products/${productId}`, { signal }),
-    enabled: Boolean(productId),
+    enabled: Boolean(productId) && !handedOver,
     staleTime: 15_000,
   });
 
-  const product = productQuery.data;
+  const product = handedOver ?? productQuery.data;
 
   return (
     <BottomSheet
@@ -65,7 +70,7 @@ export function ProductSheetHost() {
         <ProductSheetBody
           product={product}
           attribution={attribution}
-          preselectedVariantId={(request ?? lastRequest)?.variantId}
+          preselectedVariantId={active?.variantId}
         />
       ) : (
         <ProductSheetSkeleton failed={productQuery.isError} retryLabel={t("app.retry")} onRetry={() => void productQuery.refetch()} />
@@ -111,8 +116,7 @@ function ProductSheetBody({
   preselectedVariantId?: string | undefined;
 }) {
   const t = useTranslator();
-  const addToCart = useAddToCart();
-  const addButtonRef = useRef<HTMLButtonElement | null>(null);
+  const add = useCartStore((state) => state.add);
   const [added, setAdded] = useState(false);
 
   const groups = useMemo(() => variantOptionGroups(product.variants), [product.variants]);
@@ -130,12 +134,22 @@ function ProductSheetBody({
   const image = product.images[0];
   const price = selected?.price ?? product.priceRange.min;
 
-  const add = () => {
+  const addToCart = () => {
     if (!selected || soldOut) return;
-    addToCart.mutate(
-      { variantId: selected.id, attribution },
-      { onSuccess: () => setAdded(true) }
-    );
+    add({
+      variantId: selected.id,
+      attribution,
+      preview: {
+        productId: product.id,
+        productTitle: product.title,
+        imageUrl: image?.url ?? null,
+        variantOptions: selected.options,
+        unitPrice: selected.price,
+        stock: selected.stock,
+        vendor: product.vendor,
+      },
+    });
+    setAdded(true);
   };
 
   return (
@@ -208,25 +222,23 @@ function ProductSheetBody({
       ) : null}
 
       <button
-        ref={addButtonRef}
         type="button"
         className={quickAddStyles.inlineButton}
         data-testid="sheet-add-to-cart"
         data-state={added ? "added" : undefined}
-        disabled={soldOut || !selected || addToCart.isPending}
-        onClick={add}
+        disabled={soldOut || !selected}
+        onClick={addToCart}
       >
-        {soldOut
-          ? t("product.soldOut")
-          : addToCart.isPending
-            ? t("sheet.adding")
-            : added
-              ? t("sheet.added")
-              : t("sheet.addToCart")}
+        {soldOut ? t("product.soldOut") : added ? t("sheet.added") : t("sheet.addToCart")}
       </button>
 
-      <p className={addToCart.isError ? styles.error : styles.status} role="status">
-        {addToCart.isError ? t("sheet.addFailed") : added ? t("sheet.added") : ""}
+      {/*
+        * The add is applied locally and queued, so there is no in-flight state to
+        * show here and no failure to report: a request that does not go through
+        * stays in the queue and is reported on the cart, where it can be acted on.
+        */}
+      <p className={styles.status} role="status">
+        {added ? t("sheet.added") : ""}
       </p>
     </div>
   );

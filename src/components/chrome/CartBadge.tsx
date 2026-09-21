@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import styles from "./chrome.module.css";
-import { useCart } from "@/features/cart/cart-queries";
+import { useCartView } from "@/features/cart/use-cart-view";
 import { useTranslator } from "@/i18n/client";
 
 /**
@@ -17,8 +17,7 @@ import { useTranslator } from "@/i18n/client";
  */
 export function CartBadge({ tone = "bar" }: { tone?: "bar" | "overlay" }) {
   const t = useTranslator();
-  const { data } = useCart();
-  const count = data?.itemCount ?? 0;
+  const { itemCount: count } = useCartView();
 
   return (
     <Link

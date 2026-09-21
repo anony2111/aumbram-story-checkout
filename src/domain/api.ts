@@ -68,7 +68,11 @@ export interface PincodeNotServiceableDetails {
 /** What a card needs, and nothing else. */
 export interface ProductCardView {
   id: string;
-  vendorId: string;
+  /**
+   * The full summary rather than just an id: a quick-add that happens offline has
+   * to render a cart line with a seller name on it, and there is nobody to ask.
+   */
+  vendor: VendorSummary;
   title: string;
   image: { url: string; width: number; height: number } | null;
   priceRange: { min: Money; max: Money };

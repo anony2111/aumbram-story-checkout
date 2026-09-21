@@ -85,6 +85,9 @@ export const en = {
   "cart.subtotal": "Subtotal",
   "cart.checkout": "Checkout",
   "cart.discoveredVia": "Discovered via {creatorHandle}",
+  "cart.fromStory": "From a story you watched",
+  "cart.problemsTitle": "Needs your attention",
+  "cart.lineCount": { one: "{count} item", other: "{count} items" },
 
   // ----------------------------------------------------------- checkout
   "checkout.title": "Checkout",

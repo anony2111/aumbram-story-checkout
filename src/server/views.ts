@@ -35,9 +35,11 @@ function livePriceRange(product: Product): { min: Money; max: Money } {
 export function productCard(product: Product): ProductCardView {
   const image = product.images[0];
   const inStock = product.variants.filter((variant) => currentStock(variant.id) > 0);
+  const vendor = getDataset().vendors.get(product.vendorId);
+  if (!vendor) throw new Error(`Unknown vendor ${product.vendorId}`);
   return {
     id: product.id,
-    vendorId: product.vendorId,
+    vendor: vendorSummary(vendor),
     title: product.title,
     image: image ? { url: image.url, width: image.width, height: image.height } : null,
     priceRange: livePriceRange(product),

@@ -334,13 +334,16 @@ export function StoryViewer({ story, creator, products, creatorFeedOrder }: Stor
         products={products}
         container={containerSize}
         t={t}
-        onOpen={(productId) =>
+        onOpen={(productId) => {
+          const product = products.find((candidate) => candidate.id === productId);
           openProductSheet({
             productId,
             // The whole point of the viewer: this is what a creator gets paid on.
             attribution: { storyId: story.id, creatorId: creator.id },
-          })
-        }
+            // Already server-rendered with this page, so the sheet needs no request.
+            ...(product ? { product } : {}),
+          });
+        }}
       />
 
       <p className={styles.caption}>{story.caption}</p>
