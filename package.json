@@ -1,0 +1,54 @@
+{
+  "name": "aumbram-story-checkout",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "seed": "node scripts/seed.mjs",
+    "seed:force": "node scripts/seed.mjs --force",
+    "predev": "npm run seed",
+    "dev": "next dev",
+    "prebuild": "npm run seed",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "pretest": "npm run seed",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "pretest:e2e": "npm run seed",
+    "test:e2e": "playwright test",
+    "e2e:install": "playwright install --with-deps chromium"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.103.2",
+    "next": "16.3.5",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "web-vitals": "^6.2.2",
+    "zod": "^4.6.5",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
+    "@types/jest-axe": "^3.5.9",
+    "@types/node": "^22.20.4",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.1.1",
+    "cross-env": "^10.1.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.5",
+    "jest-axe": "^11.0.0",
+    "jsdom": "^29.1.1",
+    "typescript": "^5",
+    "vitest": "^5.0.1"
+  }
+}

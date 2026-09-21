@@ -1,0 +1,147 @@
+/*
+ * Global tokens and reset.
+ *
+ * The app is mobile-first: a single column capped at --app-width and centred on
+ * wider screens (desktop layouts are explicitly out of scope). No web fonts are
+ * loaded — the system stack renders both Latin and Devanagari, which keeps the
+ * critical path free of font bytes and avoids a swap-induced layout shift.
+ */
+
+:root {
+  --app-width: 448px;
+
+  --bg: #ffffff;
+  --bg-subtle: #f5f5f4;
+  --bg-inset: #ebeae8;
+  --surface: #ffffff;
+  --fg: #1c1917;
+  --fg-muted: #57534e;
+  --fg-subtle: #78716c;
+  --border: #e7e5e4;
+  --border-strong: #d6d3d1;
+
+  --accent: #9a3412;
+  --accent-fg: #ffffff;
+  --accent-subtle: #fff7ed;
+
+  --danger: #b91c1c;
+  --danger-subtle: #fef2f2;
+  --success: #15803d;
+  --success-subtle: #f0fdf4;
+  --warning: #a16207;
+  --warning-subtle: #fefce8;
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  --font-sans:
+    system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Devanagari",
+    Arial, sans-serif;
+
+  --header-height: 52px;
+  --z-header: 10;
+  --z-sheet: 100;
+  --z-toast: 200;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--bg-inset);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-size: inherit;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Visible to screen readers only. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
