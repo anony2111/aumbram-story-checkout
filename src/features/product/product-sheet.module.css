@@ -1,0 +1,120 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.summary {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.image {
+  flex: 0 0 auto;
+  width: 92px;
+  height: 92px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  background: var(--bg-inset);
+}
+
+.summaryText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.vendor {
+  font-size: 13px;
+  color: var(--fg-subtle);
+}
+
+.price {
+  font-size: 19px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.stockLow {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--warning);
+}
+
+.stockOut {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-subtle);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.groupLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-muted);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  border-radius: 999px;
+  /* 44px minimum touch target, per WCAG 2.5.8. */
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.chip[aria-pressed="true"] {
+  border-color: var(--fg);
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.chip:disabled {
+  color: var(--fg-subtle);
+  background: var(--bg-subtle);
+  border-color: var(--border);
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.error {
+  font-size: 13px;
+  color: var(--danger);
+}
+
+.status {
+  font-size: 13px;
+  color: var(--success);
+  min-height: 18px;
+}
+
+.attribution {
+  font-size: 12px;
+  color: var(--fg-subtle);
+}
+
+.skeletonBlock {
+  height: 92px;
+  border-radius: var(--radius);
+  background: var(--bg-inset);
+}
+
+.skeletonLine {
+  height: 12px;
+  border-radius: 999px;
+  background: var(--bg-inset);
+}

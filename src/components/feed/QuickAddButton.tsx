@@ -73,6 +73,8 @@ export function QuickAddButton({
     <button
       type="button"
       className={variant === "card" ? styles.button : styles.inlineButton}
+      data-testid="quick-add"
+      data-picker={needsPicker ? "true" : "false"}
       data-state={justAdded ? "added" : undefined}
       disabled={soldOut || addToCart.isPending}
       aria-label={soldOut ? undefined : t("product.quickAddNamed", { title })}
