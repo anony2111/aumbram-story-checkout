@@ -28,7 +28,20 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const locale = await getLocale();
 
   return (
-    <html lang={locale}>
+    /*
+     * `suppressHydrationWarning` on <html> only.
+     *
+     * This element is the one browser extensions reliably mutate before React
+     * hydrates — password managers, reader modes and translation tools all add
+     * attributes to it — and a real user's Chrome has several installed. React
+     * reports every one of those as a hydration mismatch, which turns a genuine
+     * signal into noise nobody reads.
+     *
+     * It suppresses warnings for this element's own attributes and nothing else:
+     * the tree underneath is still checked normally, and we own nothing dynamic
+     * on <html> anyway — `lang` comes from a cookie read on the server.
+     */
+    <html lang={locale} suppressHydrationWarning>
       <body>
         <Providers locale={locale} dictionary={getDictionary(locale)}>
           {children}
